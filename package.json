@@ -1,4 +1,15 @@
 {
+  "name": "final-project-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "backend": "cd backend/stock && mvnw spring-boot:run",
+    "frontend": "cd inventory-forecasting-dashboard && npm run dev",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
     "tailwindcss": "^4.3.0"

@@ -9,7 +9,6 @@ const LogIn: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isFocused, setIsFocused] = useState(false); // added for Chrome hack
 
   const handleLogIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -97,16 +96,14 @@ const LogIn: React.FC = () => {
                 </span>
                 <input
                   id="password"
-                  name="new-password"
-                  type={isFocused? "password" : "text"} // Chrome hack
+                  name="password"
+                  type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  onFocus={() => setIsFocused(true)} // Chrome hack
-                  onBlur={() => setIsFocused(false)} // Chrome hack
                   className="block w-full pl-10 pr-3 py-2.5 border-slate-200 bg-slate-50 text-slate-700 rounded-xl placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 text-sm font-semibold transition"
                   placeholder="••••"
-                  autoComplete="new-password"
+                  autoComplete="current-password"
                 />
               </div>
             </div>

@@ -190,6 +190,8 @@ export default function Header({ toggleSidebar }: HeaderProps) {
       confirmButtonText: 'OK',
       timer: 2000,
       timerProgressBar: true
+    }).then(() => {
+      navigate("/login");
     });
   };
 

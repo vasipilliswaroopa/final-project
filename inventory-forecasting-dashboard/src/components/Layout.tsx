@@ -18,6 +18,8 @@ export default function Layout() {
       confirmButtonText: 'OK',
       timer: 2000,
       timerProgressBar: true
+    }).then(() => {
+      navigate("/login");
     });
   };
 
