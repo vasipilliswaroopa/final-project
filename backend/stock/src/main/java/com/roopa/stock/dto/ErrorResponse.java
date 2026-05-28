@@ -1,10 +1,20 @@
 package com.roopa.stock.dto;
 
-import lombok.Data;
-import lombok.AllArgsConstructor;
-
-@Data
-@AllArgsConstructor
 public class ErrorResponse {
-    private String error;
+    private String message;
+
+    public ErrorResponse() {
+    }
+
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
 }
