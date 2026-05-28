@@ -4,10 +4,15 @@ const getBaseURL = (): string => {
   if (import.meta.env.VITE_API_URL) {
     return import.meta.env.VITE_API_URL;
   }
-  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
-    return "/api";
+  if (typeof window !== "undefined") {
+    // If we are in production deployment (e.g. Vercel), we use the relative /api proxy
+    if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1" && !window.location.hostname.startsWith("192.168.") && !window.location.hostname.startsWith("10.") && !window.location.hostname.startsWith("172.")) {
+      return "/api";
+    }
+    // For local network / development, use the current host with backend port 10000
+    return `${window.location.protocol}//${window.location.hostname}:10000/api`;
   }
-  return "http://localhost:8080/api";
+  return "http://localhost:10000/api";
 };
 
 const apiClient = axios.create({
@@ -16,6 +21,22 @@ const apiClient = axios.create({
     "Content-Type": "application/json",
   },
 });
+
+apiClient.interceptors.request.use(
+  (config) => {
+    const currentUserStr = localStorage.getItem("currentUser");
+    if (currentUserStr) {
+      const currentUser = JSON.parse(currentUserStr);
+      if (currentUser && currentUser.token) {
+        config.headers.Authorization = `Bearer ${currentUser.token}`;
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export interface Product {
   id?: number;
@@ -30,6 +51,7 @@ export interface User {
   name?: string;
   email: string;
   password?: string;
+  token?: string;
 }
 
 export interface DashboardStats {
@@ -62,11 +84,11 @@ export const productService = {
 
 export const userService = {
   login: async (user: User): Promise<User> => {
-    const response = await apiClient.post<User>("/users/login", user);
+    const response = await apiClient.post<User>("/auth/login", user);
     return response.data;
   },
   signup: async (user: User): Promise<User> => {
-    const response = await apiClient.post<User>("/users", user);
+    const response = await apiClient.post<User>("/auth/register", user);
     return response.data;
   },
   updateProfile: async (id: number, user: User): Promise<User> => {

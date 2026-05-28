@@ -5,6 +5,7 @@ import com.roopa.stock.entity.users;
 import com.roopa.stock.repository.UserRepository;
 import com.roopa.stock.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +15,9 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    // Secure SHA-256 password hashing helper function
+    // Secure SHA-256 password hashing helper function (retained for backward compatibility checks)
     private String hashPassword(String password) {
         if (password == null) return null;
         try {
@@ -36,8 +38,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDTO createUser(UserDTO userDTO) {
         users user = mapToEntity(userDTO);
-        // Secure password before persistence
-        user.setPassword(hashPassword(userDTO.getPassword()));
+        // Secure password before persistence using BCrypt
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         users savedUser = userRepository.save(user);
         return mapToDTO(savedUser);
     }
@@ -62,8 +64,8 @@ public class UserServiceImpl implements UserService {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
-            // Secure new password before update
-            user.setPassword(hashPassword(userDTO.getPassword()));
+            // Secure new password before update using BCrypt
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }
         users updatedUser = userRepository.save(user);
         return mapToDTO(updatedUser);
@@ -79,18 +81,23 @@ public class UserServiceImpl implements UserService {
         users user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Invalid email or password"));
         
-        String hashedIncoming = hashPassword(password);
+        String encodedPassword = user.getPassword();
 
-        // Soft Security: Check for plain-text password match first (backwards compatibility).
-        // If it matches, upgrade/migrate the user to a secure SHA-256 hash immediately.
-        if (user.getPassword().equals(password)) {
-            user.setPassword(hashedIncoming);
-            userRepository.save(user);
-        } else if (!user.getPassword().equals(hashedIncoming)) {
-            throw new RuntimeException("Invalid email or password");
+        if (passwordEncoder.matches(password, encodedPassword)) {
+            // Valid BCrypt match
+            return mapToDTO(user);
         }
 
-        return mapToDTO(user);
+        // Check legacy formats (SHA-256 or plain text)
+        String hashedIncomingSha256 = hashPassword(password);
+        if (encodedPassword.equals(hashedIncomingSha256) || encodedPassword.equals(password)) {
+            // Valid legacy match! Upgrade user to BCrypt immediately
+            user.setPassword(passwordEncoder.encode(password));
+            userRepository.save(user);
+            return mapToDTO(user);
+        }
+
+        throw new RuntimeException("Invalid email or password");
     }
 
     private UserDTO mapToDTO(users user) {

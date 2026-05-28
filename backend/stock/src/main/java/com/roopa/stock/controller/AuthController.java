@@ -1,5 +1,6 @@
 package com.roopa.stock.controller;
 
+import com.roopa.stock.config.JwtService;
 import com.roopa.stock.dto.LoginRequest;
 import com.roopa.stock.dto.LoginResponse;
 import com.roopa.stock.dto.ErrorResponse;
@@ -23,23 +24,31 @@ public class AuthController {
     private final AuthenticationManager authManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager authManager, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.authManager = authManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
         try {
-            Authentication authentication = authManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(
-                            request.getEmail(),
-                            request.getPassword()
-                    )
+            Authentication auth = authManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-            return ResponseEntity.ok(new LoginResponse("Login success", request.getEmail()));
+            users user = userRepository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new RuntimeException("User not found after authentication"));
+            String token = jwtService.generateToken(user.getEmail());
+            return ResponseEntity.ok(new LoginResponse(
+                    "Login success",
+                    user.getEmail(),
+                    token,
+                    user.getId(),
+                    user.getName()
+            ));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Invalid email or password"));
         }
