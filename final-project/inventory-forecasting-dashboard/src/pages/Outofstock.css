@@ -1,0 +1,17 @@
+.out-of-stock-card {
+  background: #1e293b;
+  border: 1px solid #334155;
+}
+
+.out-of-stock-title {
+  color: #f1f5f9;
+}
+
+.out-of-stock-count {
+  color: #ef4444;
+}
+
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #334155;
+}

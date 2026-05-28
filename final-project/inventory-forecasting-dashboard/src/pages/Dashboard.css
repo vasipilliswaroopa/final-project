@@ -1,0 +1,67 @@
+.page-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.info-card {
+  background: black;
+  border-radius: 1rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+  padding: 1.25rem;
+}
+
+.info-label {
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.info-value {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-top: 0.5rem;
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+  padding: 1.25rem;
+  min-height: 20rem;
+}
+
+.chart-box {
+  height: 14rem;
+  background: #f8fafc;
+  border-radius: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+@media (max-width: 1024px) {
+  .card-grid,
+  .chart-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .card-grid,
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+}

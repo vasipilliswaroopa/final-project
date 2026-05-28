@@ -1,0 +1,6 @@
+.simple-page {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.08);
+  padding: 1.25rem;
+}
