@@ -3,12 +3,16 @@ package com.roopa.stock.controller;
 import com.roopa.stock.dto.LoginRequest;
 import com.roopa.stock.dto.LoginResponse;
 import com.roopa.stock.dto.ErrorResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.roopa.stock.dto.UserDTO;
+import com.roopa.stock.entity.users;
+import com.roopa.stock.repository.UserRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,8 +20,15 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = {"http://localhost:5173", "https://final-project-twxp.vercel.app"})
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authManager;
+    private final AuthenticationManager authManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthController(AuthenticationManager authManager, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.authManager = authManager;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request) {
@@ -30,7 +41,25 @@ public class AuthController {
             );
             return ResponseEntity.ok(new LoginResponse("Login success", request.getEmail()));
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(401).body(new ErrorResponse("Invalid email or password"));
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Invalid email or password"));
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserDTO request) {
+        if (userRepository.existsByEmail(request.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Email is already registered"));
+        }
+        users user = new users();
+        user.setName(request.getName());
+        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        userRepository.save(user);
+
+        UserDTO responseDTO = new UserDTO();
+        responseDTO.setId(user.getId());
+        responseDTO.setName(user.getName());
+        responseDTO.setEmail(user.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDTO);
     }
 }
