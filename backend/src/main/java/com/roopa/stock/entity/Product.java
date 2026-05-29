@@ -3,6 +3,7 @@ package com.roopa.stock.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "product", schema = "public")
@@ -14,7 +15,14 @@ public class Product {  // <-- CAPITAL P - THIS LINE IS CRITICAL
     private Long id;
 
     private String name;
-    private int quantity;
-    private double price;
+
+    @Column(name = "quantity")
+    @JsonProperty("quantity")
+    private int stock_quantity;
+
+    @Column(name = "price")
+    @JsonProperty("price")
+    private double unit_price;
+
     private String category;
 }

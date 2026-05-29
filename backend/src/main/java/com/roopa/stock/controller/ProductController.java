@@ -20,18 +20,25 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAllProducts() {  // <-- Capital P
+        log.info("[ProductController] GET /api/products request received");
         List<Product> products = productRepository.findAll();
-        log.info("Found {} products", products.size());
+        System.out.println("Found " + products.size() + " products");
+        log.info("[ProductController] GET /api/products response: returning {} products", products.size());
         return products;
     }
 
     @PostMapping
     public Product createProduct(@RequestBody Product product) {  // <-- Capital P both times
-        return productRepository.save(product);  // <-- lowercase p
+        log.info("[ProductController] POST /api/products request received: {}", product);
+        Product saved = productRepository.save(product);  // <-- lowercase p
+        log.info("[ProductController] POST /api/products response: {}", saved);
+        return saved;
     }
 
     @DeleteMapping("/{id}")
     public void deleteProduct(@PathVariable Long id) {
+        log.info("[ProductController] DELETE /api/products/{} request received", id);
         productRepository.deleteById(id);  // <-- lowercase p
+        log.info("[ProductController] DELETE /api/products/{} completed", id);
     }
 }
