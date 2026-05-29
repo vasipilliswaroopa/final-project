@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Category from './pages/Category';
 import ProtectedRoute from './components/ProtectedRoute'; 
+import Stocks from './pages/Stocks';
 
 function App() {
   return (
@@ -17,7 +18,7 @@ function App() {
       <Routes>
         
         <Route path="/login" element={<LogIn />} />
-        
+        <Route path="/stocks" element={<Stocks />} />
         
         <Route element={<ProtectedRoute />}>
           <Route element={<Layout />}>

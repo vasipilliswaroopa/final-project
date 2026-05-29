@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "backend": "cd backend/stock && mvnw spring-boot:run",
-    "frontend": "cd inventory-forecasting-dashboard && npm run dev",
+    "backend": "cd backend && mvnw spring-boot:run",
+    "frontend": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "devDependencies": {
@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.0",
+    "cors": "^2.8.6",
     "tailwindcss": "^4.3.0"
   }
 }

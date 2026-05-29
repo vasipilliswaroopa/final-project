@@ -19,6 +19,8 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.Arrays;
 import java.util.List;
 
+import org.springframework.security.config.Customizer;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -31,10 +33,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable) // Handled globally by CorsFilter with Ordered.HIGHEST_PRECEDENCE
+                .cors(Customizer.withDefaults()) // Integrates with WebMvcConfigurer CORS mappings
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // This must be FIRST
-                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/", "/health", "/api/stocks", "/error", "/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session

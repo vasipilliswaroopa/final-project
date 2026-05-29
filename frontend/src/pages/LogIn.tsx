@@ -118,6 +118,19 @@ const LogIn: React.FC = () => {
               </button>
             </div>
           </form>
+
+          <div className="mt-6 pt-6 border-t border-slate-100 flex flex-col gap-2.5">
+            <p className="text-center text-xs font-semibold text-slate-400">
+              Want to view the public stock data feed directly?
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate("/stocks")}
+              className="w-full flex justify-center py-2.5 px-4 border border-blue-200 hover:border-blue-300 rounded-xl text-xs font-bold text-blue-600 hover:bg-slate-50/50 transition cursor-pointer"
+            >
+              View Public Stock Market Ticker
+            </button>
+          </div>
         </div>
       </div>
     </div>

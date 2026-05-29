@@ -97,4 +97,30 @@ export const userService = {
   },
 };
 
+export interface Stock {
+  symbol: string;
+  price: number;
+}
+
+export const stockService = {
+  getStocks: async (): Promise<Stock[]> => {
+    const response = await apiClient.get<Stock[]>("/stocks");
+    return response.data;
+  },
+};
+
+export const healthService = {
+  checkHealth: async (): Promise<boolean> => {
+    try {
+      const apiURL = getBaseURL();
+      const rootURL = apiURL.endsWith("/api") ? apiURL.substring(0, apiURL.length - 4) : apiURL;
+      const response = await axios.get<string>(`${rootURL}/health`);
+      return response.data === "OK";
+    } catch (err) {
+      console.error("Health check failed", err);
+      return false;
+    }
+  },
+};
+
 export default apiClient;
