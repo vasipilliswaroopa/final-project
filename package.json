@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "backend": "cd backend && mvnw spring-boot:run",
-    "frontend": "cd frontend && npm run dev",
+    "frontend": "cd inventory-forecasting-dashboard && npm run dev",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\""
   },
   "devDependencies": {
