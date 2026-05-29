@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "product")  // <-- Add this line
+@Table(name = "product", schema = "public")  // <-- add schema = "public"
 @Data
 @NoArgsConstructor
 public class product {
