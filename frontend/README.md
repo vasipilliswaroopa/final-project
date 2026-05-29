@@ -19,7 +19,7 @@ Vercel is the recommended hosting platform for Vite + React applications.
 3. **Configure Environment Variables**:
    Under **Environment Variables**, add the API base URL variable:
    - **Key**: `VITE_API_URL`
-   - **Value**: `https://stock-backend-api-jkve.onrender.com/api` (The deployed URL of your Spring Boot backend, appended with `/api`).
+   - **Value**: `https://stock-backend-api-zwy1.onrender.com/api` (The deployed URL of your Spring Boot backend, appended with `/api`).
 
 4. **Deploy**:
    - Click **Deploy**. Vercel will build the frontend and serve it globally with auto-HTTPS and Edge caching.
@@ -40,7 +40,7 @@ Vercel is the recommended hosting platform for Vite + React applications.
 3. **Configure Environment Variables**:
    - Go to **Site settings > Environment variables** and click **Add a variable**.
    - **Key**: `VITE_API_URL`
-   - **Value**: `https://stock-backend-api-jkve.onrender.com/api`
+   - **Value**: `https://stock-backend-api-zwy1.onrender.com/api`
 
 4. **Deploy**:
    - Click **Deploy site**.

@@ -54,7 +54,7 @@ export default function Stocks() {
             </span>
             <h1 className="text-3xl font-black mt-2 tracking-tight">Stock Market Ticker</h1>
             <p className="text-blue-100/90 text-sm mt-1.5 font-medium">
-              Real-time stock data fetched directly from <code className="bg-black/20 px-1.5 py-0.5 rounded font-mono text-xs text-white">stock-backend-api-jkve</code>
+              Real-time stock data fetched directly from <code className="bg-black/20 px-1.5 py-0.5 rounded font-mono text-xs text-white">stock-backend-api-zwy1</code>
             </p>
           </div>
           <button
@@ -79,7 +79,7 @@ export default function Stocks() {
             <div>
               <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Backend Server</h3>
               <p className="text-sm font-extrabold text-slate-800 mt-0.5">
-                {isConnected ? "stock-backend-api-jkve" : "Connection Check"}
+                {isConnected ? "stock-backend-api-zwy1" : "Connection Check"}
               </p>
             </div>
           </div>
