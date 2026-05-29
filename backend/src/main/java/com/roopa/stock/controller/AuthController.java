@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
-@CrossOrigin(origins = "https://final-project-twxp.vercel.app")
+@CrossOrigin(origins = "https://final-project.vercel.app")
 public class AuthController {
 
     private final AuthenticationManager authManager;
@@ -43,11 +43,11 @@ public class AuthController {
                     .orElseThrow(() -> new RuntimeException("User not found after authentication"));
             String token = jwtService.generateToken(user.getEmail());
             return ResponseEntity.ok(new LoginResponse(
-                    "Login success",
-                    user.getEmail(),
                     token,
+                    user.getName(),
+                    user.getEmail(),
                     user.getId(),
-                    user.getName()
+                    "USER"
             ));
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Invalid email or password"));

@@ -2,16 +2,16 @@ package com.roopa.stock.dto;
 
 public class LoginResponse {
     private String token;
-    private String username;
+    private String name;
     private String email;
     private Long id;
     private String role;
 
     public LoginResponse() {}
 
-    public LoginResponse(String token, String username, String email, Long id, String role) {
+    public LoginResponse(String token, String name, String email, Long id, String role) {
         this.token = token;
-        this.username = username;
+        this.name = name;
         this.email = email;
         this.id = id;
         this.role = role;
@@ -19,8 +19,8 @@ public class LoginResponse {
 
     public String getToken() { return token; }
     public void setToken(String token) { this.token = token; }
-    public String getUsername() { return username; }
-    public void setUsername(String username) { this.username = username; }
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     public Long getId() { return id; }

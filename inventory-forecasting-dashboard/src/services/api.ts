@@ -1,18 +1,20 @@
 import axios from "axios";
 
 const getBaseURL = (): string => {
+  let url = "http://localhost:10000/api";
   if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-  if (typeof window !== "undefined") {
+    url = import.meta.env.VITE_API_URL;
+  } else if (typeof window !== "undefined") {
     // If we are in production deployment (e.g. Vercel), we use the relative /api proxy
     if (window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1" && !window.location.hostname.startsWith("192.168.") && !window.location.hostname.startsWith("10.") && !window.location.hostname.startsWith("172.")) {
-      return "/api";
+      url = "/api";
+    } else {
+      // For local network / development, use the current host with backend port 10000
+      url = `${window.location.protocol}//${window.location.hostname}:10000/api`;
     }
-    // For local network / development, use the current host with backend port 10000
-    return `${window.location.protocol}//${window.location.hostname}:10000/api`;
   }
-  return "http://localhost:10000/api";
+  console.log("[API] Resolved Base URL:", url);
+  return url;
 };
 
 const apiClient = axios.create({
@@ -70,7 +72,9 @@ export const dashboardService = {
 
 export const productService = {
   getAllProducts: async (): Promise<Product[]> => {
+    console.log("[API] Fetching all products...");
     const response = await apiClient.get<Product[]>("/products");
+    console.log("[API] Fetched products response:", response.data);
     return response.data;
   },
   createProduct: async (product: Product): Promise<Product> => {
@@ -84,7 +88,9 @@ export const productService = {
 
 export const userService = {
   login: async (user: User): Promise<User> => {
+    console.log("[API] Logging in user:", user.email);
     const response = await apiClient.post<User>("/auth/login", user);
+    console.log("[API] Login successful. Response payload:", response.data);
     return response.data;
   },
   signup: async (user: User): Promise<User> => {
@@ -92,7 +98,9 @@ export const userService = {
     return response.data;
   },
   updateProfile: async (id: number, user: User): Promise<User> => {
+    console.log(`[API] Updating profile for user ID ${id}:`, user);
     const response = await apiClient.put<User>(`/users/${id}`, user);
+    console.log("[API] Profile update successful. Response:", response.data);
     return response.data;
   },
 };

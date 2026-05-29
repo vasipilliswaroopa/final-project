@@ -17,6 +17,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
                 .allowedOrigins(
+                        "https://final-project.vercel.app",
                         "https://final-project-twxp.vercel.app",
                         "https://final-project-twxp-3fuuy6wlo-roopa-megha.vercel.app",
                         "http://localhost:5173",
@@ -31,6 +32,7 @@ public class CorsConfig implements WebMvcConfigurer {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
+                "https://final-project.vercel.app",
                 "https://final-project-twxp.vercel.app",
                 "https://final-project-twxp-3fuuy6wlo-roopa-megha.vercel.app",
                 "http://localhost:5173",
